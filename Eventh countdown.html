@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Event Countdown</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      background: linear-gradient(135deg, #002f4b, #005f73, #0a9396, #94d2bd);
+      background-size: 400% 400%;
+      animation: gradieshift 15s ease infinite;
+      }
+      @keyframes gradieShift {
+        0% {background-position: 0% 50%; }
+        50% {background-position: 100% 50%; }
+        100%{background-position: 0% 50%; }
+      }
+      h1, p {
+      margin-bottom: 10px 0;
+      }
+      input, button {
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+        border: none;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .countdown {
+        font-size: 1.5em;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+    </style>
+</head>
+<body>
+  <h1>Evevnt countdown</h1>
+  
+  <input type="text" id="eventName" placeholder="Enter Event Name">
+  <input type="datetime-local" id="eventtDate">
+  <button onclick="startCountdown()">Start Countdown</button>
+  <button onclick="generateShareLink()">Share Link</button>
+  <div class="countdown" id="countdown"></div>
+  <script>
+    function startCountdown(name, date) {
+      const eventName = date ||
+      document.getElementById("eventName").value;
+      const eventDate = date ||
+      document.getElementById("eventDate").value;
+
+      if (!eventName || !eventDate) {
+        alart("Please enter event name and date.");
+        return;
+      }
+const targetDate = new
+      Date(eventDate).getTime();
+
+clearInterval(window.countdownTimer);
+window.countdownTimer = setInterval(() => {
+  const now = new
+  Date().getTime();
+  const distance = targetDate - now;
+  if (distance < 0){
+    clearInterval(window.countdownTimer);
+    document.getElementById("countdown").innerHTML = eventName + "has passed!";
+    return;
+  }
+  const days = 
+  Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = 
+  Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = 
+  Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = 
+  Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML = 
+  '${eventName}: ${days}d ${hours}h ${minutes}s ${seconds}s';
+  }, 1000);
+    }
+    function generateShareLink() {
+      const eventName = 
+      document.getElementById("evevnName").value
+      const eventtDate = 
+      document.getElementById("eventDate").value
+      if (!eventName || !eventtDate) {
+        alert("Please enter event details before generating link.");
+        return;
+      }
+      const encodedName = 
+      encodeURIComponent(eventName);
+      const encodedDate = 
+      encodeURIComponent(eventtDate);
+      const shareLink = '$ {window.location.origin}${window.location.pathname}name=${encodedName}date=$ {encodedDate}';
+    navigator.clipboard.writeText(shareLink).then(() => {
+      alart("share link copied clipboard!");
+    });
+    }
+    // Auto-load from link if parameters exist
+    const urlparams = new
+URLSearchParams(window.location.search);
+const nameFromURL = 
+urlparams.get("name");
+const dateFromURL = 
+urlparams.get("date");
+if ("nameFromURL && dateFromURL") {
+
+  document.getElementById("eventName").value = decodeURIComponent("dateFromURL");
+
+  Document.getElementById("eventDate").value = decodeURIComponent("dateFromURL");
+  
+  startCountdown(decodeURIComponent("nameFromURL"),
+decodeURIComponent("dateFromURL"));
+}
+  </script>
+</body>
+</html>
